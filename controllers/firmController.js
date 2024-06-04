@@ -19,14 +19,13 @@ const upload = multer({ storage: storage });
 
 const addFirm = async (req, res) => {
     try {
-        const {firmName, area, category, region , offer} = req.body
-        const image =  req.file.filename
+        const {firmName, area, category, region, offer} = req.body
+        console.log(req)
+        const image =  await req.file.name
         const vendor = await Vendor.findById(req.vendorId);
         if (!vendor) {
             res.status(404).json({message: "Vendor Not Found"})
         }else {
-            const isFirmAlreadyexists = Firm.findOne({firmName: firmName});
-            console.log(isFirmAlreadyexists._conditions)
                 const firm = new Firm({
                     firmName, area, category, region , offer, image, vendor: vendor._id
                 })
