@@ -20,32 +20,30 @@ const upload = multer({ storage: storage });
 const addFirm = async (req, res) => {
     try {
         const {firmName, area, category, region , offer} = req.body
-
-
         const image = req.file ? req.file.filename : undefined;
-
-
         const vendor = await Vendor.findById(req.vendorId);
         if (!vendor) {
             res.status(404).json({message: "Vendor Not Found"})
         }else {
-            const isFirmAlreadyExists = vendor.firm.find(element => element.firmName === firmName);
-            if (isFirmAlreadyExists) {
-                return res.status(401).json({message: "Firm Already exists"})
-            }
-            const firm = new Firm({
-                firmName, area, category, region , offer, image, vendor: vendor._id
-            })
-            const savedFirm = await firm.save();
-            vendor.firm.push(savedFirm)
-    
-            await vendor.save()
-    
-            return res.status(200).json({message: "Firm added successfully"});
+            const isFirmAlreadyexists = Firm.findOne({firmName: firmName});
+            console.log(isFirmAlreadyexists._conditions)
+                const firm = new Firm({
+                    firmName, area, category, region , offer, image, vendor: vendor._id
+                })
+                const savedFirm = await firm.save();
+                vendor.firm.push(savedFirm)
+        
+                await vendor.save();
+        
+                return res.status(200).json({message: "Firm added successfully"});
+                // return res.status(405).json({message: "Firm Already exists"});
         }
     }catch(error) {
         console.error(error) ;
-        res.status(500).json("Internal server error")
+        if (error.code === 11000) {
+            return res.status(500).json({message : "Firm Already Exists"});
+        }
+        return res.status(500).json({message : "Internal server Error"});
     }
     
 }
