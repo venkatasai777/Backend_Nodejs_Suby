@@ -7,7 +7,7 @@ const path = require('path');
 
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
-        cb(null, 'uploads/');
+        cb(null, '/uploads/');
     },
     filename: (req, file, cb) => {
         cb(null, Date.now() + path.extname(file.originalname));
@@ -20,7 +20,7 @@ const upload = multer({ storage: storage });
 const addFirm = async (req, res) => {
     try {
         const {firmName, area, category, region , offer} = req.body
-        const image = req.file ? req.file.filename : undefined;
+        const image =  req.file.filename
         const vendor = await Vendor.findById(req.vendorId);
         if (!vendor) {
             res.status(404).json({message: "Vendor Not Found"})
@@ -35,7 +35,7 @@ const addFirm = async (req, res) => {
         
                 await vendor.save();
         
-                return res.status(200).json({message: "Firm added successfully"});
+                return res.status(200).json({message: "Firm added successfully", obj: savedFirm});
                 // return res.status(405).json({message: "Firm Already exists"});
         }
     }catch(error) {

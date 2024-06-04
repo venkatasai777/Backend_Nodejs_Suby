@@ -41,7 +41,7 @@ const vendorLogin = async (req, res) => {
             return res.status(401).json({error: "Invalid username or Password"});
         }
 
-        const token = jwt.sign({vendorId: vendor._id}, secretkey, {expiresIn: "1h"})
+        const token = jwt.sign({vendorId: vendor._id}, secretkey, {expiresIn: "90h"})
 
         res.status(200).json({success: "Login Successful", token})
         console.log(token)
