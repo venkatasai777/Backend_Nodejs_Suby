@@ -63,8 +63,7 @@ const vendorLogin = async (req, res) => {
  }
 
  const getVendorById = async (req, res) => {
-    const vendorId = req.params.id ;
-    console.log(vendorId)
+    const vendorId = req.params.id;
     try {
         const vendor = await Vendor.findById(vendorId);
         if (!vendor) {
@@ -74,7 +73,6 @@ const vendorLogin = async (req, res) => {
     }catch(error) {
         console.error(error);
         res.status(500).json({error: "Internal server error"}) ;
-
     }
  }
 
